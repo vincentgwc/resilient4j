@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import io.github.resilience4j.bulkhead.Bulkhead;
+import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.core.registry.EntryAddedEvent;
 import io.github.resilience4j.core.registry.EntryRemovedEvent;
 import io.github.resilience4j.core.registry.EntryReplacedEvent;
@@ -37,6 +38,31 @@ public class Resilient4jApp {
                  .onEvent(event -> System.out.println(event.toString()));
 			}
 		};
+    }
+    
+    @Bean
+    public RegistryEventConsumer<CircuitBreaker> myCircuitBreakerRegistryEventConsumer() {
+        return new RegistryEventConsumer<CircuitBreaker>() {
+
+			@Override
+			public void onEntryAddedEvent(EntryAddedEvent<CircuitBreaker> entryAddedEvent) {
+				// TODO Auto-generated method stub
+				entryAddedEvent.getAddedEntry().getEventPublisher()
+            		.onEvent(event -> System.out.println(event.toString()));
+			}
+
+			@Override
+			public void onEntryRemovedEvent(EntryRemovedEvent<CircuitBreaker> entryRemoveEvent) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onEntryReplacedEvent(EntryReplacedEvent<CircuitBreaker> entryReplacedEvent) {
+				// TODO Auto-generated method stub
+				
+			}
+        };
     }
     
     @Bean
